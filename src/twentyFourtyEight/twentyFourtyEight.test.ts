@@ -1,121 +1,263 @@
 import { TwentyFourtyEight } from "./twentyFourtyEight"
 
+const block = (value?: number) => ({ isVisible: !!value, value })
+
 describe('TwentyFourtyEight', () => {
   const subject = new TwentyFourtyEight()
 
   describe('row', () => {
     it('.shiftRight should move all visible blocks to the right', () => {
-      const initial = [{ isVisible: true }, { isVisible: false }]
-      const expected = [{ isVisible: false }, { isVisible: true }]
+      const initial = [block(1), block()]
+      const expected = [block(), block(1)]
       expect(subject._shiftRight(initial)).toEqual(expected);
     })
 
     it('shiftLeft should move all visible blocks to the right', () => {
-      const initial = [{ isVisible: false }, { isVisible: true }]
-      const expected = [{ isVisible: true }, { isVisible: false }]
+      const initial = [block(), block(1)]
+      const expected = [block(1), block()]
       expect(subject._shiftLeft(initial)).toEqual(expected);
     })
 
     it('should shiftBlocksLeft', () => {
-
       const initial = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: false }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: false }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: true }, { isVisible: false }, { isVisible: false }],
+        [block(), block(), block(), block()],
+        [block(1), block(), block(), block(1)],
+        [block(1), block(), block(), block(1)],
+        [block(), block(), block(), block()],
       ]
       const expected = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
+        [block(), block(), block(), block()],
+        [block(2), block(), block(), block()],
+        [block(2), block(), block(), block()],
+        [block(), block(), block(), block()],
       ]
       expect(subject.shiftBlocksLeft(initial)).toEqual(expected);
     })
     it('should shiftBlocksRight', () => {
 
       const initial = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: false }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: false }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: true }, { isVisible: false }, { isVisible: false }],
+        [block(), block(), block(), block()],
+        [block(1), block(), block(), block(1)],
+        [block(1), block(), block(), block(1)],
+        [block(), block(), block(), block()],
       ]
       const expected = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: false }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: true }],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block(2)],
+        [block(), block(), block(), block(2)],
+        [block(), block(), block(), block()],
       ]
       expect(subject.shiftBlocksRight(initial)).toEqual(expected);
     })
+
+    it('mergeing should be prioritized with the cell in the direction of movement(right)', () => {
+      const initial = [
+        [block(), block(), block(), block()],
+        [block(1), block(), block(1), block(1)],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+      ]
+      const expected = [
+        [block(), block(), block(), block()],
+        [block(), block(), block(1), block(2)],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+      ]
+
+      expect(subject.shiftBlocksRight(initial)).toEqual(expected);
+    })
+
+    it('mergeing should be prioritized with the cell in the direction of movement(left)', () => {
+      const initial = [
+        [block(), block(), block(), block()],
+        [block(1), block(), block(1), block(1)],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+      ]
+      const expected = [
+        [block(), block(), block(), block()],
+        [block(2), block(1), block(), block()],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+      ]
+
+      expect(subject.shiftBlocksLeft(initial)).toEqual(expected);
+    })
+
   })
 
   describe('columns', () => {
     it('.getColumn should return blocks in a perticular column from a 2D array', () => {
       const initial = [
-        [{ isVisible: true }, { isVisible: false }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: false }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: false }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: false }, { isVisible: true }, { isVisible: true }],
+        [block(1), block(), block(1), block(1)],
+        [block(1), block(), block(1), block(1)],
+        [block(1), block(), block(1), block(1)],
+        [block(1), block(), block(1), block(1)],
       ]
       const expected = [
-        { isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }
+        block(), block(), block(), block()
       ]
       expect(subject._getColumn(initial, 1)).toEqual(expected)
     })
 
     it('.convertRowsToColumn should convert block array to column provided', () => {
-      const colAsRow = [{ isVisible: true }, { isVisible: true }, { isVisible: false }, { isVisible: true }]
+      const colAsRow = [block(1), block(1), block(), block(1)]
       const expected = [
-        [{ isVisible: true }],
-        [{ isVisible: true }],
-        [{ isVisible: false }],
-        [{ isVisible: true }],
+        [block(1)],
+        [block(1)],
+        [block()],
+        [block(1)],
       ]
       expect(subject._transposeColumnArrayToColumn(colAsRow, 0, [[], [], [], []])).toEqual(expected);
     })
     it('.convertRowsToColumn should convert block array to column provided', () => {
-      const colAsRow = [{ isVisible: true }, { isVisible: true }, { isVisible: false }, { isVisible: true }]
+      const colAsRow = [block(1), block(1), block(), block(1)]
       const expected = [
-        [undefined, { isVisible: true }],
-        [undefined, { isVisible: true }],
-        [undefined, { isVisible: false }],
-        [undefined, { isVisible: true }],
+        [undefined, block(1)],
+        [undefined, block(1)],
+        [undefined, block()],
+        [undefined, block(1)],
       ]
       expect(subject._transposeColumnArrayToColumn(colAsRow, 1, [[], [], [], []])).toEqual(expected);
     })
 
     it('.shiftBlocksDown should shifts blocks in a column down', () => {
       const initial = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
+        [block(), block(), block(), block()],
+        [block(1), block(1), block(1), block(1)],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
       ]
       const expected = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+        [block(1), block(1), block(1), block(1)],
       ]
 
       expect(subject.shiftBlocksDown(initial)).toEqual(expected);
     })
+
     it('.shiftBlocksUp should shifts blocks in a column down', () => {
       const initial = [
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+        [block(1), block(1), block(1), block(1)],
+        [block(), block(), block(), block()],
       ]
       const expected = [
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: true }, { isVisible: true }, { isVisible: true }, { isVisible: true }],
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
-        [{ isVisible: false }, { isVisible: false }, { isVisible: false }, { isVisible: false }],
+        [block(1), block(1), block(1), block(1)],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
+        [block(), block(), block(), block()],
       ]
 
       expect(subject.shiftBlocksUp(initial)).toEqual(expected);
+    })
+    describe('should merge ', () => {
+
+      it('same Value blocks and increment them when shifting down', () => {
+        const initial = [
+          [block(), block(), block(), block()],
+          [block(1), block(1), block(1), block(1)],
+          [block(1), block(1), block(1), block(1)],
+          [block(), block(), block(), block()],
+        ]
+        const expected = [
+          [block(), block(), block(), block()],
+          [block(), block(), block(), block()],
+          [block(), block(), block(), block()],
+          [block(2), block(2), block(2), block(2)],
+        ]
+
+        expect(subject.shiftBlocksDown(initial)).toEqual(expected);
+      })
+      it('same values and uniquie values untouched and in order when shifting down', () => {
+        const initial = [
+          [block(4), block(4), block(4), block(4)],
+          [block(4), block(4), block(4), block(4)],
+          [block(1), block(1), block(1), block(1)],
+          [block(3), block(3), block(3), block(3)],
+
+        ]
+        const expected = [
+          [block(), block(), block(), block()],
+          [block(5), block(5), block(5), block(5)],
+          [block(1), block(1), block(1), block(1)],
+          [block(3), block(3), block(3), block(3)],
+        ]
+
+        expect(subject.shiftBlocksDown(initial)).toEqual(expected);
+      })
+
+      it('same Value blocks and increment them when shifting up', () => {
+        const initial = [
+          [block(), block(), block(), block()],
+          [block(1), block(1), block(1), block(1)],
+          [block(1), block(1), block(1), block(1)],
+          [block(), block(), block(), block()],
+        ]
+        const expected = [
+          [block(2), block(2), block(2), block(2)],
+          [block(), block(), block(), block()],
+          [block(), block(), block(), block()],
+          [block(), block(), block(), block()],
+        ]
+
+        expect(subject.shiftBlocksUp(initial)).toEqual(expected);
+      })
+
+      it('mergeing should be prioritized with the cell in the direction of movement(up)', () => {
+        const initial = [
+          [block(1), block(1), block(1), block(1)],
+          [block(), block(), block(), block()],
+          [block(1), block(1), block(1), block(1)],
+          [block(1), block(1), block(1), block(1)],
+        ]
+        const expected = [
+          [block(2), block(2), block(2), block(2)],
+          [block(1), block(1), block(1), block(1)],
+          [block(), block(), block(), block()],
+          [block(), block(), block(), block()],
+        ]
+
+        expect(subject.shiftBlocksUp(initial)).toEqual(expected);
+      })
+      it('mergeing should be prioritized with the cell in the direction of movement(down)', () => {
+        const initial = [
+          [block(1), block(1), block(1), block(1)],
+          [block(), block(), block(), block()],
+          [block(1), block(1), block(1), block(1)],
+          [block(1), block(1), block(1), block(1)],
+        ]
+        const expected = [
+          [block(), block(), block(), block()],
+          [block(), block(), block(), block()],
+          [block(1), block(1), block(1), block(1)],
+          [block(2), block(2), block(2), block(2)],
+        ]
+
+        expect(subject.shiftBlocksDown(initial)).toEqual(expected);
+      })
+
+      it('same values and uniquie values untouched and in order when shifting down', () => {
+        const initial = [
+          [block(4), block(4), block(4), block(4)],
+          [block(4), block(4), block(4), block(4)],
+          [block(1), block(1), block(1), block(1)],
+          [block(3), block(3), block(3), block(3)],
+
+        ]
+        const expected = [
+          [block(5), block(5), block(5), block(5)],
+          [block(1), block(1), block(1), block(1)],
+          [block(3), block(3), block(3), block(3)],
+          [block(), block(), block(), block()],
+        ]
+
+        expect(subject.shiftBlocksUp(initial)).toEqual(expected);
+      })
+
     })
   })
 

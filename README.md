@@ -9,12 +9,16 @@
 7. ```[[blocks]] -------GameOver--------> bool```
 
 
+ 
+
 ### shiftUp 
  `[[blocks]] -----shiftUp ----> [[blocks]]`
  
 	[[blocks]] columnNumber -----getColumn----> column ([blocks])
-    
+
 	column ----shiftLeft--> shiftedColumn ([blocks])
+
+  shiftedColumns, direction -------mergeSameValueBlocks ----->[blocks]
      
 	shiftedColumn, columnNumber, [[],[],[],[]]--convertRowsToColumn--> [[b],[l],[o],[k]]
      
@@ -25,6 +29,8 @@
 	[[blocks]] columnNumber -----getColumn----> column ([blocks])
 		
 	column ----shiftRight--> shiftedColumn ([blocks])
+
+  shiftedColumns, direction -------mergeSameValueBlocks ----->[blocks]
 		
 	shiftedColumn, columnNumber, [[],[],[],[]]--convertRowsToColumn--> [[b],[l],[o],[k]]
 
