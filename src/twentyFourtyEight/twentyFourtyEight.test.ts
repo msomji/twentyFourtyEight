@@ -100,7 +100,7 @@ describe("TwentyFourtyEight", () => {
       const colAsRow: Block[] = [block(1), block(1), block(), block(1)]
       const expected = [[block(1)], [block(1)], [block()], [block(1)]]
       expect(
-        subject._revertRowToColumn([[], [], [], []],colAsRow, 0)
+        subject._revertRowToColumn([[], [], [], []], colAsRow, 0)
       ).toEqual(expected)
     })
     it(".convertRowsToColumn should convert block array to column provided", () => {
@@ -112,7 +112,7 @@ describe("TwentyFourtyEight", () => {
         [undefined, block(1)],
       ]
       expect(
-        subject._revertRowToColumn([[], [], [], []],colAsRow, 1)
+        subject._revertRowToColumn([[], [], [], []], colAsRow, 1)
       ).toEqual(expected)
     })
 
@@ -250,27 +250,27 @@ describe("TwentyFourtyEight", () => {
       })
     })
   })
-    
-    describe("merge", () => {
-      
-      it("_mergeForward should merge favoring to the right", () => {
-        const actual = [block(4), block(4), block(1), block(3)]
-        const expected = [block(), block(5), block(1), block(3)]
-        expect(subject._mergeForward(actual)).toEqual(expected);
-      })
-      it("_mergeForward should merge favoring to the righr", () => {
-        const actual = [block(1), block(1), block(1)]
-        const expected = [block(), block(), block(1), block(2)]
-        
-        expect(subject._mergeForward(actual)).toEqual(expected);
-      })
-      
-      it("_mergeBackwards should merge favoring to the left", () => {
-        const actual = [block(4), block(4), block(1), block(3)]
-        const expected = [block(5), block(1), block(3), block()]
+
+  describe("merge", () => {
+
+    it("_mergeForward should merge favoring to the right", () => {
+      const actual = [block(4), block(4), block(1), block(3)]
+      const expected = [block(), block(5), block(1), block(3)]
+      expect(subject._mergeForward(actual)).toEqual(expected);
+    })
+    it("_mergeForward should merge favoring to the righr", () => {
+      const actual = [block(1), block(1), block(1)]
+      const expected = [block(), block(), block(1), block(2)]
+
+      expect(subject._mergeForward(actual)).toEqual(expected);
+    })
+
+    it("_mergeBackwards should merge favoring to the left", () => {
+      const actual = [block(4), block(4), block(1), block(3)]
+      const expected = [block(5), block(1), block(3), block()]
       expect(subject._mergeBackwards(actual)).toEqual(expected);
     })
-    
+
     it("_mergeBackwards should merge favoring to the down2", () => {
       const actual = [block(1), block(1), block(1)]
       const expected = [block(2), block(1), block(), block()]
@@ -313,7 +313,7 @@ describe("TwentyFourtyEight", () => {
       const numberOf = result.reduce((count, row) => {
         const invibleBlocksInCurrentRow = row.filter(block => !block.isVisible)
         count += invibleBlocksInCurrentRow.length;
-        return count ;
+        return count;
       }, 0)
       expect(numberOf).toBe(0);
     })
@@ -327,7 +327,7 @@ describe("TwentyFourtyEight", () => {
       const numberOf = result.reduce((count, row) => {
         const invibleBlocksInCurrentRow = row.filter(block => !block.isVisible)
         count += invibleBlocksInCurrentRow.length;
-        return count ;
+        return count;
       }, 0)
       expect(numberOf).toBe(1);
     })
