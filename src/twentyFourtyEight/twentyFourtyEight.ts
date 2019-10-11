@@ -46,12 +46,42 @@ _mergeBackwards: (blocks: Block[]) => Block[] =  (blocks) => {
   return this._append(things);
 }
 
+updateRandomBlockToVisible: (board: Block[][]) => Block[][] = (board) => {
+  const totalNumberofInvisibleTiles = board.reduce((count, row) => {
+    const invibleBlocksInCurrentRow = row.filter(block => !block.isVisible)
+    count += invibleBlocksInCurrentRow.length;
+    return count ;
+  }, 0)
+
+   const blockNumberToFlip = Math.floor(Math.random() * totalNumberofInvisibleTiles) + 1  
+
+   return board.reduce((accum, current) => {
+     const updatedRow = current.map((block, index) => {
+       if(!block.isVisible && accum.count === blockNumberToFlip) {
+         accum.count += 1
+         return { value: 14, isVisible: true}
+       } else if(!block.isVisible) {
+         accum.count +=1
+       } 
+       
+       return block
+     })
+     return {
+      count: accum.count,
+      updatedBoard: [...accum.updatedBoard, [...updatedRow]]
+     };
+  }, {
+    count: 1,
+    updatedBoard: []
+  }).updatedBoard
+}
   shiftBlocksRight: (board: Block[][]) => Block[][] = (board) => board.map(row => this._mergeForward((row.filter(b => b.isVisible))))
   shiftBlocksLeft: (board: Block[][]) => Block[][] = (board) => board.map(row => this._mergeBackwards((row.filter(b => b.isVisible))))
 
   shiftBlocksDown: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeForward)
   shiftBlocksUp: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeBackwards)
 
-  //game over
-  // add random initial block
+  gameOver: (board: Block[][]) => boolean = board => board.reduce((value, row)=> 
+    !row.some(b => !b.isVisible) || row.some(b => b.value === 11)
+  , false)
 }

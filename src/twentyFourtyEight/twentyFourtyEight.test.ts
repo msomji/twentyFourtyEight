@@ -278,4 +278,58 @@ describe("TwentyFourtyEight", () => {
       expect(subject._mergeBackwards(actual)).toEqual(expected);
     })
   })
+
+  describe('Game Over', () => {
+    it('should return false if there are any inVisibleBlocks', () => {
+      const actual = [
+        [block(1), block(1), block(1)],
+        [block(1), block(1), block()]
+      ]
+
+      expect(subject.gameOver(actual)).toEqual(false);
+    })
+    it('should return true if there are no more inVisibleBlocks', () => {
+      const actual = [block(1), block(1), block(1)]
+
+      expect(subject.gameOver([actual])).toEqual(true);
+    })
+
+    it('should return true if there one of the blocks has a value of 11', () => {
+      const actual = [
+        [block(1), block(1), block(1)],
+        [block(11), block(1), block(1)]
+      ]
+
+      expect(subject.gameOver(actual)).toEqual(true);
+    })
+  })
+  describe('update random block to visible', () => {
+    it('should flip the last one', () => {
+      const actual = [
+        [block(1), block(1), block(1)],
+        [block(), block(1), block(1)]
+      ]
+      const result = subject.updateRandomBlockToVisible(actual)
+      const numberOf = result.reduce((count, row) => {
+        const invibleBlocksInCurrentRow = row.filter(block => !block.isVisible)
+        count += invibleBlocksInCurrentRow.length;
+        return count ;
+      }, 0)
+      expect(numberOf).toBe(0);
+    })
+
+    it('should flip only one', () => {
+      const actual = [
+        [block(1), block(1), block(1)],
+        [block(), block(), block(1)]
+      ]
+      const result = subject.updateRandomBlockToVisible(actual)
+      const numberOf = result.reduce((count, row) => {
+        const invibleBlocksInCurrentRow = row.filter(block => !block.isVisible)
+        count += invibleBlocksInCurrentRow.length;
+        return count ;
+      }, 0)
+      expect(numberOf).toBe(1);
+    })
+  })
 })
