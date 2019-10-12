@@ -1,7 +1,6 @@
-export interface Block {
-  isVisible: boolean;
-  value?: number;
-}
+import { Block } from "../models/block";
+import { buildBlock } from "./utils";
+
 const boolToNumber = (f: boolean) => f ? 1 : -1;
 const GRID_DIMENTIONS = 4;
 const EMPTY_BOARD: any[][] = Array(GRID_DIMENTIONS).fill('').map(d => Array(GRID_DIMENTIONS))
@@ -81,6 +80,11 @@ export default class TwentyFourtyEight {
 
   shiftBlocksDown: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeForward)
   shiftBlocksUp: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeBackwards)
-
   gameOver: (board: Block[][]) => boolean = board => board.reduce((value, row) => !row.some(b => !b.isVisible) || row.some(b => b.value === 11), false)
+  newGame: () => Block[][] = () => {
+    const board = Array(4).fill('').map(row => {
+      return Array(4).fill('').map(b => buildBlock())
+    })
+    return this.updateRandomBlockToVisible(board);
+  }
 }

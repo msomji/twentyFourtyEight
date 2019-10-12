@@ -1,0 +1,13 @@
+.block {
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  background-color: white;
+
+  .hidden {
+    display: hidden;
+  }
+}
