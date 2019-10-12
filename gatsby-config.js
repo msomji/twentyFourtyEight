@@ -14,10 +14,14 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-typescript`,
+      resolve: "gatsby-plugin-typescript",
       options: {
-        isTSX: true, // defaults to false
-        allExtensions: true, // defaults to false
+        transpileOnly: true, // default
+        compilerOptions: {
+          target: `esnext`,
+          experimentalDecorators: true,
+          jsx: `react`,
+        }, // default
       },
     },
     `gatsby-transformer-sharp`,

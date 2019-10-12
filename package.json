@@ -6,7 +6,8 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@types/jest": "^24.0.18",
-    "core-js": "3",
+    "@types/react-helmet": "^5.0.11",
+    "core-js": "^3.2.1",
     "eslint": "^5.16.0",
     "eslint-plugin-flowtype": "^2.50.3",
     "gatsby": "^2.15.29",
@@ -21,20 +22,20 @@
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-helmet": "^5.2.1",
-    "typescript": "^3.6.3"
+    "react-helmet": "^5.2.1"
   },
   "devDependencies": {
     "@types/node": "^12.7.11",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
     "babel-jest": "^24.9.0",
-    "babel-preset-gatsby": "^0.2.17",
+    "babel-preset-gatsby": "^0.2.18",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "react-test-renderer": "^16.10.2",
-    "ts-jest": "^24.1.0"
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.4"
   },
   "keywords": [
     "gatsby"

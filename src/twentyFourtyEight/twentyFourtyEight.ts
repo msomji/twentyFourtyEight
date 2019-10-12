@@ -6,7 +6,7 @@ const boolToNumber = (f: boolean) => f ? 1 : -1;
 const GRID_DIMENTIONS = 4;
 const EMPTY_BOARD: any[][] = Array(GRID_DIMENTIONS).fill('').map(d => Array(GRID_DIMENTIONS))
 
-export class TwentyFourtyEight {
+export default class TwentyFourtyEight {
   _append: (blocks: Block[]) => Block[] = blocks => Array(GRID_DIMENTIONS).fill('').reduce((accum, _) => accum.length < GRID_DIMENTIONS ? [...accum, { isVisible: false }] : accum, blocks)
   _getColumnAsRow: (board: Block[][], columnNumber: number) => Block[] = (board, columnNumber) => board.map(blocks => blocks[columnNumber])
 
@@ -44,7 +44,7 @@ export class TwentyFourtyEight {
         return [...accum, current]
       }
     }, [])
-    return this._append(things);
+    return this._append(things.flat(Infinity));
   }
 
   updateRandomBlockToVisible: (board: Block[][]) => Block[][] = (board) => {

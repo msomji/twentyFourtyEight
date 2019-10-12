@@ -1,4 +1,4 @@
-import { TwentyFourtyEight, Block } from "./twentyFourtyEight"
+import TwentyFourtyEight, { Block } from "./twentyFourtyEight"
 
 const block = (value?: number) => ({ isVisible: !!value, value })
 
@@ -276,6 +276,14 @@ describe("TwentyFourtyEight", () => {
       const expected = [block(2), block(1), block(), block()]
 
       expect(subject._mergeBackwards(actual)).toEqual(expected);
+    })
+    
+    it("_mergeBackwards should merge each block only once per merge", () => {
+      const actual = [block(1), block(1), block(2), block(1), block(1), block(1)]
+      const expected = [block(2), block(2), block(2), block(1)]
+
+      expect(subject._mergeBackwards(actual)).toEqual(expected);
+
     })
   })
 
