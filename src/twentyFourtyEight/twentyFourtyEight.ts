@@ -3,10 +3,11 @@ export interface Block {
   value?: number;
 }
 const boolToNumber = (f: boolean) => f ? 1 : -1;
-const EMPTY_BOARD: any[][] = Array(4).fill('').map(d => Array(4))
+const GRID_DIMENTIONS = 4;
+const EMPTY_BOARD: any[][] = Array(GRID_DIMENTIONS).fill('').map(d => Array(GRID_DIMENTIONS))
 
 export class TwentyFourtyEight {
-  _append: (blocks: Block[]) => Block[] = blocks => Array(4).fill('').reduce((accum, _) => accum.length < 4 ? [...accum, { isVisible: false }] : accum, blocks)
+  _append: (blocks: Block[]) => Block[] = blocks => Array(GRID_DIMENTIONS).fill('').reduce((accum, _) => accum.length < GRID_DIMENTIONS ? [...accum, { isVisible: false }] : accum, blocks)
   _getColumnAsRow: (board: Block[][], columnNumber: number) => Block[] = (board, columnNumber) => board.map(blocks => blocks[columnNumber])
 
   _revertRowToColumn: (initalBoard: Block[][], colAsRow: Block[], columnNumber: number, ) => Block[][] = (initalBoard, colAsRow, columnNumber, ) =>
@@ -16,7 +17,7 @@ export class TwentyFourtyEight {
     })
 
   _shiftDirection: (board: Block[][], mergeDirection: (blocks: Block[]) => Block[]) => Block[][] = (board, mergeDirection) =>
-    Array(4).fill('')
+    Array(GRID_DIMENTIONS).fill('')
       .map((_, columnIndex) => this._getColumnAsRow(board, columnIndex))
       .map(c => c.filter(f => f.isVisible))
       .map(column => mergeDirection(column))
@@ -29,7 +30,7 @@ export class TwentyFourtyEight {
   _mergeForward: (blocks: Block[]) => Block[] = (blocks) => this._mergeBackwards(blocks.reverse()).reverse()
 
   _mergeBackwards: (blocks: Block[]) => Block[] = (blocks) => {
-    const things = blocks.reduce((accum, current, index) => {
+    const things: Array<Block> = blocks.reduce((accum, current, index) => {
       if (index === 0) return [current]
 
       if (accum[accum.length - 1].value === current.value) {
@@ -37,7 +38,7 @@ export class TwentyFourtyEight {
           ...accum[accum.length - 1],
           value: accum[accum.length - 1].value + 1
         }
-        return accum;
+        return [accum];
 
       } else {
         return [...accum, current]
@@ -59,7 +60,7 @@ export class TwentyFourtyEight {
       const updatedRow = current.map((block, index) => {
         if (!block.isVisible && accum.count === blockNumberToFlip) {
           accum.count += 1
-          return { value: 14, isVisible: true }
+          return { value: 1, isVisible: true }
         } else if (!block.isVisible) {
           accum.count += 1
         }
