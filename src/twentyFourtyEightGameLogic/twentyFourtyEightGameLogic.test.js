@@ -1,7 +1,5 @@
-import TwentyFourtyEight from "./twentyFourtyEight"
-import { Block } from "../models/block"
-import { buildBlock } from "./utils"
-
+import {TwentyFourtyEight} from "./twentyFourtyEightGameLogic"
+import {buildBlock} from "../utils"
 
 
 describe("TwentyFourtyEight", () => {
@@ -99,7 +97,7 @@ describe("TwentyFourtyEight", () => {
     })
 
     it(".convertRowsToColumn should convert block array to column provided", () => {
-      const colAsRow: Block[] = [buildBlock(1), buildBlock(1), buildBlock(), buildBlock(1)]
+      const colAsRow = [buildBlock(1), buildBlock(1), buildBlock(), buildBlock(1)]
       const expected = [[buildBlock(1)], [buildBlock(1)], [buildBlock()], [buildBlock(1)]]
       expect(
         subject._revertRowToColumn([[], [], [], []], colAsRow, 0)
