@@ -7,7 +7,7 @@
   width: 50px;
   background-color: white;
 
-  .hidden {
-    display: hidden;
-  }
+}
+.block .hidden {
+  display: hidden;
 }
