@@ -1,8 +1,8 @@
 import { Block } from "../models/block";
+import { flatten, buildBlock } from "../utils";
 
-import { buildBlock } from "../utils";
-import { flatten } from '../utils'
-const boolToNumber = (booleanValue) => booleanValue ? 1 : -1;
+
+const boolToNumber = (booleanValue: boolean) => booleanValue ? 1 : -1;
 const GRID_DIMENTIONS = 4;
 const EMPTY_BOARD = Array(GRID_DIMENTIONS).fill('').map(d => Array(GRID_DIMENTIONS))
 
@@ -30,7 +30,7 @@ export class TwentyFourtyEight {
   _mergeForward: (blocks: Block[]) => Block[] = (blocks) => this._mergeBackwards(blocks.reverse()).reverse()
 
   _mergeBackwards: (blocks: Block[]) => Block[] = (blocks) => {
-    const things: Array<Block> = blocks.reduce((accum, current, index) => {
+    const things: Array<Block> = blocks.reduce((accum: any[], current: Block, index: number) => {
       if (index === 0) return [current]
 
       if (accum[accum.length - 1].value === current.value) {
@@ -56,7 +56,7 @@ export class TwentyFourtyEight {
 
     const blockNumberToFlip = Math.floor(Math.random() * totalNumberofInvisibleTiles) + 1
 
-    return board.reduce((accum, current) => {
+    return board.reduce((accum: any, current: Block[]) => {
       const updatedRow = current.map((block, index) => {
         if (!block.isVisible && accum.count === blockNumberToFlip) {
           accum.count += 1
@@ -81,7 +81,7 @@ export class TwentyFourtyEight {
 
   shiftBlocksDown: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeForward)
   shiftBlocksUp: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeBackwards)
-  gameOver: (board: Block[][]) => boolean = board => board.reduce((value, row) => !row.some(b => !b.isVisible) || row.some(b => b.value === 11), false)
+  gameOver: (board: Block[][]) => boolean = board => board.reduce((_:any, row:Block[]) => !row.some(b => !b.isVisible) || row.some(b => b.value === 11), false)
   newGame: () => Block[][] = () => {
     const board = Array(4).fill('').map(row => {
       return Array(4).fill('').map(b => buildBlock())
