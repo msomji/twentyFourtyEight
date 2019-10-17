@@ -7,21 +7,14 @@ import * as React from 'react'
 import { Block } from "../../models/block"
 import { flatten } from "../../utils";
 
-
-// // ES6
-// const flatten = list => list.reduce(
-//   (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
-// );
-
-
 export const TwentyFourtyEightGame: React.FC = () => {
   const container = React.createRef();
   const game = new TwentyFourtyEight()
   const [blocks, setBlocks] = useState([
-    [buildBlock(99), buildBlock(99), buildBlock(99), buildBlock(99)],
-    [buildBlock(99), buildBlock(99), buildBlock(99), buildBlock(99)],
-    [buildBlock(99), buildBlock(99), buildBlock(99), buildBlock(99)],
-    [buildBlock(99), buildBlock(99), buildBlock(99), buildBlock(99)],
+    [buildBlock(0), buildBlock(0), buildBlock(0), buildBlock(0)],
+    [buildBlock(0), buildBlock(0), buildBlock(0), buildBlock(0)],
+    [buildBlock(0), buildBlock(0), buildBlock(0), buildBlock(0)],
+    [buildBlock(0), buildBlock(0), buildBlock(0), buildBlock(0)],
   ])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -31,9 +24,8 @@ export const TwentyFourtyEightGame: React.FC = () => {
     if (event.keyCode === 39) setBlocks(game.updateRandomBlockToVisible(game.shiftBlocksRight(blocks)))
   }
 
-  const newgame = () => {
-    setBlocks(game.newGame())
-  }
+  const newgame = () => setBlocks(game.newGame())
+
   return (
     <div tabIndex={0} onKeyDown={handleKeyDown} className="container">
       <div className="game-wrapper">
