@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import './twentyFourtyEight.css'
 import { buildBlock } from "../../utils"
 import { BlockComponent } from "../block/block"
-import {TwentyFourtyEight} from "../../twentyFourtyEightGameLogic/twentyFourtyEightGameLogic"
+import {TwentyFourtyEight} from "../../twentyFourtyEightGameLogic/twentyFourtyEightGameLogic";
+
 
 // ES6
 const flatten = list => list.reduce(

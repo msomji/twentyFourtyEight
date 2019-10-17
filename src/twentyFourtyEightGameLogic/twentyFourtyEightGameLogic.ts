@@ -1,3 +1,5 @@
+import { Block } from "../models/block";
+
 import { buildBlock } from "../utils";
 import { flatten } from '../utils'
 const boolToNumber = (booleanValue) => booleanValue ? 1 : -1;
@@ -5,30 +7,30 @@ const GRID_DIMENTIONS = 4;
 const EMPTY_BOARD = Array(GRID_DIMENTIONS).fill('').map(d => Array(GRID_DIMENTIONS))
 
 export class TwentyFourtyEight {
-  _append = blocks => Array(GRID_DIMENTIONS).fill('').reduce((accum, _) => accum.length < GRID_DIMENTIONS ? [...accum, { isVisible: false }] : accum, blocks)
-  _getColumnAsRow = (board, columnNumber) => board.map(blocks => blocks[columnNumber])
+  _append: (blocks: Block[]) => Block[] = blocks => Array(GRID_DIMENTIONS).fill('').reduce((accum, _) => accum.length < GRID_DIMENTIONS ? [...accum, { isVisible: false }] : accum, blocks)
+  _getColumnAsRow: (board: Block[][], columnNumber: number) => Block[] = (board, columnNumber) => board.map(blocks => blocks[columnNumber])
 
-  _revertRowToColumn = (initalBoard, colAsRow, columnNumber, ) =>
+  _revertRowToColumn: (initalBoard: Block[][], colAsRow: Block[], columnNumber: number, ) => Block[][] = (initalBoard, colAsRow, columnNumber, ) =>
     initalBoard.map((row, index) => {
       row[columnNumber] = colAsRow[index]
       return row;
     })
 
-  _shiftDirection = (board, mergeDirection) =>
+  _shiftDirection: (board: Block[][], mergeDirection: (blocks: Block[]) => Block[]) => Block[][] = (board, mergeDirection) =>
     Array(GRID_DIMENTIONS).fill('')
       .map((_, columnIndex) => this._getColumnAsRow(board, columnIndex))
       .map(c => c.filter(f => f.isVisible))
       .map(column => mergeDirection(column))
       .reduce(this._revertRowToColumn, EMPTY_BOARD)
 
-  _shiftRight = (row) => row.sort((block1, block2) => boolToNumber(block1.isVisible) - boolToNumber(block2.isVisible))
-  _shiftLeft = (row) => this._shiftRight(row).reverse()
+  _shiftRight: (row: Block[]) => Block[] = (row) => row.sort((block1, block2) => boolToNumber(block1.isVisible) - boolToNumber(block2.isVisible))
+  _shiftLeft: (row: Block[]) => Block[] = (row) => this._shiftRight(row).reverse()
 
   //  all merging assumes all blocks visible
-  _mergeForward = (blocks) => this._mergeBackwards(blocks.reverse()).reverse()
+  _mergeForward: (blocks: Block[]) => Block[] = (blocks) => this._mergeBackwards(blocks.reverse()).reverse()
 
-  _mergeBackwards = (blocks) => {
-    const things = blocks.reduce((accum, current, index) => {
+  _mergeBackwards: (blocks: Block[]) => Block[] = (blocks) => {
+    const things: Array<Block> = blocks.reduce((accum, current, index) => {
       if (index === 0) return [current]
 
       if (accum[accum.length - 1].value === current.value) {
@@ -45,7 +47,7 @@ export class TwentyFourtyEight {
     return this._append(flatten(things));
   }
 
-  updateRandomBlockToVisible = (board) => {
+  updateRandomBlockToVisible: (board: Block[][]) => Block[][] = (board) => {
     const totalNumberofInvisibleTiles = board.reduce((count, row) => {
       const invibleBlocksInCurrentRow = row.filter(block => !block.isVisible)
       count += invibleBlocksInCurrentRow.length;
@@ -74,13 +76,13 @@ export class TwentyFourtyEight {
       updatedBoard: []
     }).updatedBoard
   }
-  shiftBlocksRight = (board) => board.map(row => this._mergeForward((row.filter(b => b.isVisible))))
-  shiftBlocksLeft = (board) => board.map(row => this._mergeBackwards((row.filter(b => b.isVisible))))
+  shiftBlocksRight: (board: Block[][]) => Block[][] = (board) => board.map(row => this._mergeForward((row.filter(b => b.isVisible))))
+  shiftBlocksLeft: (board: Block[][]) => Block[][] = (board) => board.map(row => this._mergeBackwards((row.filter(b => b.isVisible))))
 
-  shiftBlocksDown = board => this._shiftDirection(board, this._mergeForward)
-  shiftBlocksUp = board => this._shiftDirection(board, this._mergeBackwards)
-  gameOver = board => board.reduce((value, row) => !row.some(b => !b.isVisible) || row.some(b => b.value === 11), false)
-  newGame = () => {
+  shiftBlocksDown: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeForward)
+  shiftBlocksUp: (board: Block[][]) => Block[][] = board => this._shiftDirection(board, this._mergeBackwards)
+  gameOver: (board: Block[][]) => boolean = board => board.reduce((value, row) => !row.some(b => !b.isVisible) || row.some(b => b.value === 11), false)
+  newGame: () => Block[][] = () => {
     const board = Array(4).fill('').map(row => {
       return Array(4).fill('').map(b => buildBlock())
     })
